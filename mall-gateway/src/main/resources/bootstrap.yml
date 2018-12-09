@@ -1,0 +1,82 @@
+server:
+  port: 2234
+
+spring:
+  application:
+    name: mall-gateway
+  cloud:
+    gateway:
+      routes:
+      - id: host_route
+#        uri: http://127.0.0.1:1234/user/getUserById/1
+        uri: lb://mall-web
+        predicates:
+        - Path=/user/getUserById/1
+        filters:
+        - name: Hystrix #指定name为Hystrix的filter，实际是对应HystrixGatewayFilterFactory
+          args:
+            name: fetchIngredients
+#            fallbackUri: forward:/fallback
+#        - StripPrefix=2 # 会把端口后面的路径层级减少2层 变成http://127.0.0.1:1234/1 暂时感觉这玩意没什么特别的用处
+#        - AddRequestParameter=foo, bar #会在uri后面加上请求参数 如果uri后面有其他参数则会在后面继续拼接成&foo=bar 如果uri后面没有其他参数则会拼接成?foo=bar
+#        - AddRequestHeader=X-Request-Foo, Bar #会在uri的request请求头加上X-Request-Foo: Bar
+#        - AddResponseHeader=X-Response-Foo, Bar #在响应头加上X-Response-Foo: Bar
+#        - Hystrix=myCommandName
+
+
+
+
+        #      - id: after_route #此路线与2017年1月20日17:42 Mountain Time（Denver）之前的任何要求相匹配。
+        #        uri: http://example.org #目标服务地址
+        #        predicates: #路由条件
+        #        - After=2017-01-20T17:42:47.789-07:00[America/Denver]
+        #      - id: between_route #此路线与2017年1月20日17:42山地时间（丹佛）之后和2017年1月21日17:42山区时间（丹佛）之后的所有要求相匹配。这对维护窗口很有用。
+        #       uri: http://example.org
+        #       predicates:
+        #       - Between=2017-01-20T17:42:47.789-07:00[America/Denver], 2017-01-21T17:42:47.789-07:00[America/Denver]
+        #      - id: cookie_route #此路由匹配请求具有名为chocolatewho的值与ch.p正则表达式匹配的cookie 。
+        #          uri: http://example.org
+        #          predicates:
+        #          - Cookie=chocolate, ch.p
+        #      - id: header_route #如果请求具有名为X-Request-Idwhos 的标头值与\d+正则表达式匹配（具有一个或多个数字的值），则此路由匹配。
+        #          uri: http://example.org
+        #          predicates:
+        #          -  Header = X-Request-Id , \d +
+        #      - id: host_route
+        #          uri: http://example.org
+        #          predicates:
+        #          - Host=**.somehost.org #如果请求的Host标头具有值www.somehost.org或，则此路由将匹配beta.somehost.org。
+        #          # -  Path = / foo / {segment } #如果请求路径是，则此路由将匹配，例如：/foo/1或/foo/bar。
+        #       - id: method_route #如果请求方法是a，则此路由将匹配GET。
+        #            uri: http://example.org
+        #            predicates:
+        #            -  Method = GET
+        #       - id: query_route #
+        #            uri: http://example.org
+        #            predicates:
+        #            - Query = baz #如果请求包含baz查询参数，则此路由将匹配。
+        #            - Query=foo, ba. #如果请求包含foo其值与ba.regexp 匹配的查询参数，则此路由将匹配，因此bar和baz将匹配。
+        #      - id: remoteaddr_route #如果请求方法是a，则此路由将匹配GET。
+        #            uri: http://example.org
+        #            predicates:
+        #            - RemoteAddr=192.168.1.1/24 #如果请求的远程地址是，则此路由将匹配192.168.1.10。
+        #      #过滤器配置
+        #       - id: add_request_parameter_route
+        #            uri: http：//example.org
+        #            filters:
+        #             - AddRequestParameter = foo, bar #这将为foo=bar所有匹配请求添加下游请求的查询字符串。
+        #      - id: add_request_parameter_route
+        #            uri: http：//example.org
+        #            filters:
+        #             - AddResponseHeader = X-Response-Foo, Bar #这将为X-Response-Foo:Bar所有匹配请求的下游响应标头添加标头
+logging:
+  level:
+    org.springframework.cloud.gateway: TRACE
+    org.springframework.http.server.reactive: DEBUG
+    org.springframework.web.reactive: DEBUG
+    reactor.ipc.netty: DEBUG
+    reactor.netty: DEBUG
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8080/eureka/

@@ -1,0 +1,17 @@
+server:
+  port: 1236
+spring:
+  application:
+    name: mall-commons
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8080/eureka/
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream
+
+
+

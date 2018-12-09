@@ -1,0 +1,108 @@
+server:
+  port: 1234
+spring:
+  application:
+    name: mall-web
+#  cloud:
+#    gateway:
+##      enabled: false  #开启网关设置
+#      routes:
+#        - id: baidu_route
+#          uri: http://www.baidu.com
+#          predicates:
+#            - Path =/user/**/**
+#          filters:
+#            - StripPrefix=3
+#      - id: after_route #此路线与2017年1月20日17:42 Mountain Time（Denver）之前的任何要求相匹配。
+#        uri: http://example.org #目标服务地址
+#        predicates: #路由条件
+#        - After=2017-01-20T17:42:47.789-07:00[America/Denver]
+#      - id: between_route #此路线与2017年1月20日17:42山地时间（丹佛）之后和2017年1月21日17:42山区时间（丹佛）之后的所有要求相匹配。这对维护窗口很有用。
+#       uri: http://example.org
+#       predicates:
+#       - Between=2017-01-20T17:42:47.789-07:00[America/Denver], 2017-01-21T17:42:47.789-07:00[America/Denver]
+#      - id: cookie_route #此路由匹配请求具有名为chocolatewho的值与ch.p正则表达式匹配的cookie 。
+#          uri: http://example.org
+#          predicates:
+#          - Cookie=chocolate, ch.p
+#      - id: header_route #如果请求具有名为X-Request-Idwhos 的标头值与\d+正则表达式匹配（具有一个或多个数字的值），则此路由匹配。
+#          uri: http://example.org
+#          predicates:
+#          -  Header = X-Request-Id , \d +
+#      - id: host_route
+#          uri: http://example.org
+#          predicates:
+#          - Host=**.somehost.org #如果请求的Host标头具有值www.somehost.org或，则此路由将匹配beta.somehost.org。
+#          # -  Path = / foo / {segment } #如果请求路径是，则此路由将匹配，例如：/foo/1或/foo/bar。
+#       - id: method_route #如果请求方法是a，则此路由将匹配GET。
+#            uri: http://example.org
+#            predicates:
+#            -  Method = GET
+#       - id: query_route #
+#            uri: http://example.org
+#            predicates:
+#            - Query = baz #如果请求包含baz查询参数，则此路由将匹配。
+#            - Query=foo, ba. #如果请求包含foo其值与ba.regexp 匹配的查询参数，则此路由将匹配，因此bar和baz将匹配。
+#      - id: remoteaddr_route #如果请求方法是a，则此路由将匹配GET。
+#            uri: http://example.org
+#            predicates:
+#            - RemoteAddr=192.168.1.1/24 #如果请求的远程地址是，则此路由将匹配192.168.1.10。
+#      #过滤器配置
+#       - id: add_request_parameter_route
+#            uri: http：//example.org
+#            filters:
+#             - AddRequestParameter = foo, bar #这将为foo=bar所有匹配请求添加下游请求的查询字符串。
+#      - id: add_request_parameter_route
+#            uri: http：//example.org
+#            filters:
+#             - AddResponseHeader = X-Response-Foo, Bar #这将为X-Response-Foo:Bar所有匹配请求的下游响应标头添加标头
+feign:
+   client:
+#  禁用Hystrix,如果设置为true后 feignclient 就不应该在加fallback，否则允许时会报 no fallback instance of ...错误
+   hystrix:
+     enabled: false
+     #提高configuration的优先级
+     default-to-properties: false
+     config:
+       default:
+         connectTimeout: 5000
+         readTimeout: 5000
+         decode404: true
+         loggerLevel: basic
+
+
+mall-api:
+  ribbon:
+    listOfServers: 127.0.0.1:1237
+#ribbon:
+#  eureka:
+#    enabled: true
+logging:
+  path: /log
+  level:
+    com.mall.web.support: debug
+ # 打印请求信息
+    org.apache.coyote.http11.Http11InputBuffer: off
+    org.springframework.cache: trace
+    net.sf.ehcache: trace
+    com.github.benmanes.caffeine: trace
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+    org.springframework.cloud.gateway: debug
+    org.springframework.http.server.reactive: debug
+    org.springframework.web.reactive: debug
+    reactor.ipc.netty: debug
+
+
+
+#gateway
+
+
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8080/eureka/
+
+
+
+
