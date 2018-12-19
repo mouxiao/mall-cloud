@@ -16,4 +16,6 @@ public interface UserService {
 
     @RequestMapping(value = "getUserById/{userId}")
     public User getUserById(@PathVariable(value = "userId") Integer userId) throws Exception;
+
+
 }
